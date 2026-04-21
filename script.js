@@ -1,7 +1,15 @@
 // This is the boilerplate code given for you
 // You can modify this code
 // Product data
-
+if (!sessionStorage.getItem("cart")) {
+  sessionStorage.setItem(
+    "cart",
+    JSON.stringify([
+      { id: 1, name: "Product 1", price: 10 },
+      { id: 5, name: "Product 5", price: 50 }
+    ])
+  );
+}
 const cartList = document.getElementById("cart-list");
 const clearBtn = document.getElementById("clear-cart-btn");
 const products = [
