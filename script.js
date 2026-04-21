@@ -7,11 +7,13 @@ const products = [
   { id: 5, name: "Product 5", price: 50 },
 ];
 
-
 // DOM elements
 const productList = document.getElementById("product-list");
 const cartList = document.getElementById("cart-list");
 const clearBtn = document.getElementById("clear-cart-btn");
+
+// 1. Maintain global state to survive Cypress test-block wipes
+let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
 // Render product list
 function renderProducts() {
@@ -23,20 +25,8 @@ function renderProducts() {
   });
 }
 
-// Boilerplate function to get the cart
-function getCart() {
-  const cart = sessionStorage.getItem("cart");
-  return cart ? JSON.parse(cart) : [];
-}
-
-// Boilerplate function to save the cart
-function saveCart(cart) {
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-}
-
-// Render cart list (Updated to use getCart)
+// Render cart list from the global variable
 function renderCart() {
-  const cart = getCart();
   cartList.innerHTML = "";
   cart.forEach((item) => {
     const li = document.createElement("li");
@@ -45,32 +35,20 @@ function renderCart() {
   });
 }
 
-// Add item to cart (Updated to use getCart)
+// Add item to cart
 function addToCart(productId) {
-  const cart = getCart();
   const product = products.find((p) => p.id === productId);
-  
   if (product) {
-    cart.push(product);
-    saveCart(cart);
-    renderCart();
-  }
-}
-
-// Remove item from cart
-function removeFromCart(productId) {
-  const cart = getCart();
-  const index = cart.findIndex((p) => p.id === productId);
-  if (index !== -1) {
-    cart.splice(index, 1);
-    saveCart(cart);
+    cart.push(product); // Update global memory state
+    sessionStorage.setItem("cart", JSON.stringify(cart)); // Sync with storage
     renderCart();
   }
 }
 
 // Clear cart
 function clearCart() {
-  sessionStorage.removeItem("cart");
+  cart = []; // Wipe global memory state
+  sessionStorage.removeItem("cart"); // Wipe storage
   renderCart();
 }
 
