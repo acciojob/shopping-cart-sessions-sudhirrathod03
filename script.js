@@ -34,7 +34,8 @@ function saveCart(cart){
 }
 // Render cart list
 function renderCart() {
-  const cart = getCart();
+	  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
 
   cartList.innerHTML = "";
 
@@ -47,7 +48,8 @@ function renderCart() {
 
 // Add item to cart
 function addToCart(productId) {
-	const cart = getCart();
+	let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
 	const product=products.find(p=>p.id === productId) ;
 	cart.push(product)
 	saveCart(cart)
