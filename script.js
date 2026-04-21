@@ -1,6 +1,9 @@
 // This is the boilerplate code given for you
 // You can modify this code
 // Product data
+
+const cartList = document.getElementById("cart-list");
+const clearBtn = document.getElementById("clear-cart-btn");
 const products = [
   { id: 1, name: "Product 1", price: 10 },
   { id: 2, name: "Product 2", price: 20 },
@@ -21,18 +24,48 @@ function renderProducts() {
   });
 }
 
+function getCart(){
+	return JSON.parse(sessionStorage.getItem("cart")) || [];
+}
+function saveCart(cart){
+	sessionStorage.setItem("cart", JSON.stringify(cart))
+}
 // Render cart list
-function renderCart() {}
+function renderCart() {
+  const cart = getCart();
+
+  cartList.innerHTML = "";
+
+  cart.forEach(item => {
+    const li = document.createElement("li");
+    li.innerText = `${item.name} - $${item.price}`;
+    cartList.appendChild(li);
+  });
+}
 
 // Add item to cart
-function addToCart(productId) {}
+function addToCart(productId) {
+	const cart = getCart();
+	const product=products.find(p=>p.id === productId) ;
+	cart.push(product)
+	saveCart(cart)
+	renderCart()
+}
 
 // Remove item from cart
 function removeFromCart(productId) {}
-
 // Clear cart
-function clearCart() {}
-
+clearBtn.addEventListener("click", clearCart);
+function clearCart() {
+sessionStorage.removeItem("cart");
+  renderCart();
+}
+productList.addEventListener("click",(e)=>{
+	if(e.target.classList.contains("add-to-cart-btn")){
+		const id = Number(e.target.dataset.id)
+		addToCart(id)
+	}
+})
 // Initial render
 renderProducts();
 renderCart();
