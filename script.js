@@ -17,6 +17,7 @@ const productList = document.getElementById("product-list");
 
 // Render product list
 function renderProducts() {
+productList.innerHTML = "";
   products.forEach((product) => {
     const li = document.createElement("li");
     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
@@ -24,8 +25,9 @@ function renderProducts() {
   });
 }
 
-function getCart(){
-	return JSON.parse(sessionStorage.getItem("cart")) || [];
+function getCart() {
+  const cart = sessionStorage.getItem("cart");
+  return cart ? JSON.parse(cart) : [];
 }
 function saveCart(cart){
 	sessionStorage.setItem("cart", JSON.stringify(cart))
