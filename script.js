@@ -69,7 +69,12 @@ productList.addEventListener("click",(e)=>{
 		const id = Number(e.target.dataset.id)
 		addToCart(id)
 	}
-})
-// Initial render
-renderProducts();
-renderCart();
+});
+
+clearBtn.addEventListener("click", clearCart);
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts();
+  renderCart();
+});
